@@ -1,0 +1,3037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Wallet</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --bg:#202236;
+    --bg2:#292c43;
+    --purple:#7554e8;
+    --purple2:#a56dff;
+    --green:#54ee39;
+    --green2:#20c72b;
+    --white:#fff;
+    --muted:#a6a7b6;
+    --line:rgba(255,255,255,.12);
+}
+
+html,
+body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    background:#090a12;
+    color:white;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    display:flex;
+    justify-content:center;
+}
+
+
+/* =========================================================
+   PHONE
+========================================================= */
+
+.phone{
+    width:475px;
+    min-height:100vh;
+
+    position:relative;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% -5%,
+            rgba(100,90,170,.5),
+            transparent 34%
+        ),
+        linear-gradient(
+            180deg,
+            #292c42,
+            #202236 72%
+        );
+
+    box-shadow:
+        0 0 100px rgba(0,0,0,.5);
+}
+
+
+/* =========================================================
+   SCREENS
+========================================================= */
+
+.screen{
+    display:none;
+    min-height:100vh;
+    padding-bottom:125px;
+}
+
+.screen.active{
+    display:block;
+}
+
+
+/* =========================================================
+   STATUS BAR
+========================================================= */
+/* Hide device status indicators from all wallet screens */
+.statusbar{display:none !important;}
+
+
+.statusbar{
+    height:65px;
+
+    padding:
+        18px
+        25px
+        0;
+
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+
+    position:relative;
+    z-index:20;
+}
+
+.time{
+    font-size:16px;
+    font-weight:700;
+}
+
+.status-right{
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    font-size:13px;
+    font-weight:600;
+}
+
+.signal{
+    display:flex;
+    gap:2px;
+    align-items:flex-end;
+}
+
+.signal i{
+    display:block;
+    width:4px;
+    background:white;
+    border-radius:2px;
+}
+
+.signal i:nth-child(1){height:5px}
+.signal i:nth-child(2){height:8px}
+.signal i:nth-child(3){height:11px}
+.signal i:nth-child(4){height:14px}
+
+.battery{
+    width:25px;
+    height:13px;
+
+    border:2px solid white;
+    border-radius:4px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:8px;
+    font-weight:800;
+
+    position:relative;
+}
+
+.battery:after{
+    content:"";
+
+    position:absolute;
+    right:-4px;
+    top:3px;
+
+    width:2px;
+    height:5px;
+
+    background:white;
+    border-radius:2px;
+}
+
+
+/* =========================================================
+   NAVIGATION TOP
+========================================================= */
+
+.wallet-top{
+    padding:
+        0
+        17px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.profile-circle{
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #55ed3b,
+            #23b92e
+        );
+
+    display:grid;
+    place-items:center;
+
+    box-shadow:
+        0 0 18px rgba(67,235,53,.22);
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.profile-circle:hover{
+    transform:scale(1.06);
+}
+
+.profile-logo{
+    width:18px;
+    height:18px;
+
+    border:4px solid white;
+
+    transform:rotate(45deg);
+    opacity:.9;
+}
+
+.gift-button{
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    border:1px solid rgba(255,255,255,.18);
+
+    background:
+        rgba(255,255,255,.045);
+
+    color:white;
+
+    font-size:21px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.gift-button:hover{
+    background:rgba(255,255,255,.12);
+    transform:scale(1.05);
+}
+
+
+/* =========================================================
+   REFERENCE WALLET HEADER BUTTONS
+========================================================= */
+
+.wallet-top .reference-logo-button{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.28);
+    background:
+        radial-gradient(circle at 50% 112%, rgba(176,143,255,.75) 0 28%, transparent 29%),
+        linear-gradient(145deg,#6752d2,#4934a8);
+    display:grid;
+    place-items:center;
+    box-shadow:0 8px 24px rgba(43,30,115,.28);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.wallet-top .reference-logo-button:hover{
+    transform:scale(1.05);
+}
+
+.wallet-top .reference-logo{
+    width:19px;
+    height:19px;
+    border:6px solid rgba(255,255,255,.88);
+    transform:rotate(45deg);
+    box-shadow:0 0 0 2px rgba(120,92,231,.28);
+}
+
+.wallet-top .reference-search-button{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.30);
+    background:rgba(255,255,255,.045);
+    color:white;
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    transition:.2s;
+    box-shadow:0 8px 24px rgba(0,0,0,.12);
+}
+
+.wallet-top .reference-search-button:hover{
+    background:rgba(255,255,255,.09);
+    transform:scale(1.05);
+}
+
+.wallet-top .reference-search-icon{
+    width:25px;
+    height:25px;
+    border:4px solid white;
+    border-radius:50%;
+    position:relative;
+    box-sizing:border-box;
+}
+
+.wallet-top .reference-search-icon::after{
+    content:"";
+    position:absolute;
+    width:13px;
+    height:4px;
+    background:white;
+    border-radius:4px;
+    right:-10px;
+    bottom:-6px;
+    transform:rotate(48deg);
+    transform-origin:left center;
+}
+
+
+
+
+
+/* =========================================================
+   COIN LIST SETTINGS — screenshot-style
+========================================================= */
+.amount-settings{position:fixed;inset:0;z-index:190;display:none;overflow-y:auto;padding:0;background:linear-gradient(180deg,#2b2f45 0%,#25283c 100%);color:#f7f7fb}
+.amount-settings.show{display:block}.amount-settings-inner{width:min(100%,475px);min-height:100%;margin:0 auto;padding:12px 12px 38px;box-sizing:border-box}
+.amount-settings-header{display:flex;align-items:center;justify-content:space-between;padding:0 4px 10px;margin-bottom:4px}.amount-settings-title{font-size:18px;font-weight:700;line-height:1.1}.amount-settings-subtitle{color:#aeb1c0;font-size:12px;margin-top:3px}
+.amount-settings-close{width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.07);color:#fff;font-size:28px;line-height:1;cursor:pointer}
+.amount-section-label{color:#8f93a5;font-size:11px;letter-spacing:1.1px;margin:8px 4px 7px}.coin-settings-list{display:flex;flex-direction:column;gap:5px}
+.coin-settings-row{position:relative;display:grid;grid-template-columns:42px minmax(0,1fr) 88px;align-items:center;min-height:68px;padding:7px 10px;border:1px solid rgba(255,255,255,.075);border-radius:18px;background:linear-gradient(135deg,rgba(70,75,99,.82),rgba(56,60,82,.88));box-shadow:inset 0 1px 0 rgba(255,255,255,.035);box-sizing:border-box}
+.coin-icon{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.22)}
+.coin-icon.btc{background:#f5a623}.coin-icon.eth{background:#6974a8}.coin-icon.usdt{background:#25a17b}.coin-icon.bnb{background:#e9b62f}.coin-icon.xrp{background:#178bc2}.coin-icon.usdc{background:#3d86d7}.coin-icon.sol{background:#111827}.coin-icon.trx{background:#c94343}.coin-icon.doge{background:#b5a33e}.coin-icon.ada{background:#3764bd}.coin-icon.ltc{background:#b9bec8}
+.coin-main{min-width:0;padding-left:2px}.coin-name{color:#f2f2f7;font-size:14px;font-weight:700;line-height:1.1}.coin-price{color:#b5b7c4;font-size:11px;margin-top:4px;white-space:nowrap}.coin-change{color:#58e75a;font-weight:700}.coin-change.down{color:#9ea3b3}
+.coin-symbol{text-align:right;color:#e5e5ec;font-size:12px;font-weight:700;align-self:start;padding-top:7px}.coin-balance{width:84px;margin-top:5px;padding:0;border:0;outline:none;background:transparent;color:#b7bac8;font-size:10px;text-align:right;font-family:inherit;-moz-appearance:textfield}.coin-balance::-webkit-outer-spin-button,.coin-balance::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.coin-balance:focus{color:#fff}.coin-fiat{text-align:right;color:#7e8395;font-size:9px;margin-top:1px}
+.amount-total-card{margin-top:12px;padding:13px 15px;border:1px solid rgba(255,255,255,.075);border-radius:18px;background:rgba(255,255,255,.045)}.amount-total-label{color:#9ca0b0;font-size:10px;letter-spacing:.9px}.amount-total-value{margin-top:4px;font-size:22px;font-weight:700}
+.amount-save{width:100%;margin-top:10px;height:48px;border:0;border-radius:16px;background:linear-gradient(135deg,#805bed,#6541cc);color:white;font-size:15px;font-weight:700;cursor:pointer}.coin-add-more{display:block;margin:14px auto 0;padding:8px 16px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.06);color:#f2f2f6;font-size:11px}
+@media(max-width:600px){.amount-settings-inner{width:100%;padding:10px 10px 28px}.coin-settings-row{grid-template-columns:40px minmax(0,1fr) 82px}.coin-balance{width:78px}}
+
+/* =========================================================
+   ACCOUNT NAME SETTINGS
+========================================================= */
+
+.account-name-settings{
+    position:fixed;
+    inset:0;
+    z-index:220;
+    display:none;
+    background:linear-gradient(180deg,#202236 0%,#171827 100%);
+    color:#fff;
+    overflow:auto;
+}
+
+.account-name-settings.show{display:block;}
+
+.account-name-settings-inner{
+    width:100%;
+    max-width:475px;
+    min-height:100%;
+    margin:0 auto;
+    padding:24px 22px 40px;
+    box-sizing:border-box;
+}
+
+.account-name-settings-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:38px;
+}
+
+.account-name-settings-title{
+    margin:0;
+    font-size:28px;
+    font-weight:700;
+}
+
+.account-name-back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.account-name-card{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:24px;
+    padding:22px;
+}
+
+.account-name-label{
+    display:block;
+    margin-bottom:10px;
+    color:#a6a7b6;
+    font-size:14px;
+}
+
+.account-name-input{
+    width:100%;
+    box-sizing:border-box;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:16px;
+    background:#292c43;
+    color:#fff;
+    padding:16px;
+    font:inherit;
+    font-size:18px;
+    outline:none;
+}
+
+.account-name-input:focus{
+    border-color:#7554e8;
+    box-shadow:0 0 0 3px rgba(117,84,232,.18);
+}
+
+.account-name-save{
+    width:100%;
+    margin-top:18px;
+    border:0;
+    border-radius:16px;
+    padding:16px;
+    background:#7554e8;
+    color:#fff;
+    font:inherit;
+    font-weight:700;
+    font-size:17px;
+    cursor:pointer;
+}
+
+/* =========================================================
+   PROFILE / SETTINGS PANEL
+========================================================= */
+
+.profile-panel{
+    position:fixed;
+    inset:0;
+    z-index:150;
+    display:none;
+    overflow-y:auto;
+    padding:0 0 80px;
+    background:#303144;
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:42px;
+    box-shadow:0 24px 70px rgba(0,0,0,.45);
+}
+
+.profile-panel.show{
+    display:block;
+}
+
+.profile-panel-handle{
+    width:72px;
+    height:10px;
+    margin:11px auto 0;
+    border-radius:10px;
+    background:rgba(255,255,255,.20);
+}
+
+.profile-panel-content{
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    padding:138px 42px 0;
+    box-sizing:border-box;
+    text-align:center;
+}
+
+.profile-avatar-large{
+    width:240px;
+    height:240px;
+    margin:0 auto 42px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    position:relative;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 50% 76%, rgba(158,126,255,.72) 0 25%, transparent 26%),
+        linear-gradient(145deg,#6250c9,#4935aa);
+    border:1px solid rgba(255,255,255,.52);
+    box-shadow:0 12px 35px rgba(45,31,125,.28);
+}
+
+.profile-avatar-logo{
+    width:58px;
+    height:58px;
+    border:18px solid #a486ff;
+    transform:rotate(45deg);
+    box-sizing:border-box;
+}
+
+.profile-name{
+    margin:0 0 56px;
+    font-size:42px;
+    line-height:1;
+    font-weight:700;
+}
+
+.profile-list{
+    text-align:left;
+}
+
+.profile-row{
+    min-height:92px;
+    display:flex;
+    align-items:center;
+    gap:26px;
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.profile-row-button{
+    width:100%;
+    border:0;
+    color:inherit;
+    font:inherit;
+    text-align:left;
+    cursor:pointer;
+}
+
+
+.profile-row-icon{
+    width:50px;
+    text-align:center;
+    color:#a1a1af;
+    font-size:31px;
+    flex:0 0 50px;
+}
+
+.profile-row-label{
+    font-size:28px;
+    font-weight:600;
+    flex:1;
+}
+
+.profile-row-chevron{
+    font-size:39px;
+    line-height:1;
+    color:white;
+}
+
+.profile-toggle{
+    width:126px;
+    height:58px;
+    padding:5px;
+    border:0;
+    border-radius:34px;
+    background:#4a4b5e;
+    position:relative;
+}
+
+.profile-toggle::before{
+    content:"";
+    display:block;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:#fff;
+}
+
+.profile-nft-card{
+    margin-top:54px;
+    height:174px;
+    border-radius:30px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.035);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+
+.profile-nft-icon{
+    font-size:42px;
+    line-height:1;
+}
+
+.profile-nft-label{
+    font-size:28px;
+    color:#ececf2;
+}
+
+.profile-close{
+    position:absolute;
+    top:20px;
+    right:25px;
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.06);
+    color:white;
+    font-size:30px;
+    cursor:pointer;
+}
+
+@media(max-width:600px){
+    .profile-panel-content{
+        padding:120px 42px 0;
+    }
+
+    .profile-avatar-large{
+        width:240px;
+        height:240px;
+    }
+
+    .profile-name{
+        font-size:40px;
+    }
+
+    .profile-row-label{
+        font-size:26px;
+    }
+}
+
+@media(min-width:601px){
+    .profile-panel{
+        max-width:475px;
+        left:50%;
+        right:auto;
+        transform:translateX(-50%);
+        width:475px;
+    }
+}
+
+/* =========================================================
+   WALLET BALANCE
+========================================================= */
+
+.balance-area{
+    height:350px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    position:relative;
+}
+
+.ring{
+    width:280px;
+    height:280px;
+
+    margin-top:-8px;
+
+    position:relative;
+}
+
+.ring svg{
+    width:100%;
+    height:100%;
+
+    transform:rotate(-90deg);
+}
+
+.ring-bg{
+    fill:none;
+    stroke:rgba(255,255,255,.07);
+    stroke-width:8;
+}
+
+.segment{
+    fill:none;
+    stroke-width:8;
+    stroke-linecap:round;
+}
+
+.seg1{
+    stroke:#ffb82f;
+    stroke-dasharray:58 800;
+}
+
+.seg2{
+    stroke:#ff654c;
+    stroke-dasharray:40 800;
+    stroke-dashoffset:-66;
+}
+
+.seg3{
+    stroke:#68e8d9;
+    stroke-dasharray:32 800;
+    stroke-dashoffset:-112;
+}
+
+.seg4{
+    stroke:#88ee39;
+    stroke-dasharray:245 800;
+    stroke-dashoffset:-150;
+}
+
+.seg5{
+    stroke:#afb6ff;
+    stroke-dasharray:110 800;
+    stroke-dashoffset:-410;
+}
+
+.seg6{
+    stroke:#45d9ff;
+    stroke-dasharray:80 800;
+    stroke-dashoffset:-530;
+}
+
+.seg7{
+    stroke:#a05cff;
+    stroke-dasharray:64 800;
+    stroke-dashoffset:-620;
+}
+
+.balance{
+    position:absolute;
+
+    top:106px;
+    left:0;
+    right:0;
+
+    text-align:center;
+}
+
+.balance .symbol{
+    color:#d4d1df;
+    font-size:15px;
+}
+
+.balance .number{
+    font-size:40px;
+    font-weight:500;
+    letter-spacing:-2px;
+}
+
+.balance .decimal{
+    color:#c5c2d0;
+    font-size:16px;
+}
+
+
+/* =========================================================
+   WALLET ACTIONS
+========================================================= */
+
+.actions{
+    display:flex;
+    gap:7px;
+
+    margin-top:-16px;
+
+    z-index:5;
+}
+
+.action{
+    border:1px solid rgba(255,255,255,.1);
+
+    background:
+        rgba(255,255,255,.07);
+
+    color:white;
+
+    border-radius:23px;
+
+    padding:11px 17px;
+
+    cursor:pointer;
+
+    font-size:12px;
+
+    transition:.2s;
+}
+
+.action:hover{
+    transform:translateY(-2px);
+    background:rgba(255,255,255,.13);
+}
+
+.action.primary{
+    background:
+        linear-gradient(
+            135deg,
+            #805bed,
+            #6541cc
+        );
+}
+
+
+/* =========================================================
+   ASSETS
+========================================================= */
+
+.assets{
+    padding:0 18px;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:9px;
+}
+
+.asset{
+    min-height:69px;
+
+    padding:10px 14px;
+
+    border-radius:23px;
+
+    border:1px solid rgba(255,255,255,.09);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.095),
+            rgba(255,255,255,.04)
+        );
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.asset:hover{
+    transform:translateY(-2px);
+    background:rgba(255,255,255,.12);
+}
+
+.asset-left{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.coin{
+    width:44px;
+    height:44px;
+
+    border-radius:14px;
+
+    display:grid;
+    place-items:center;
+
+    font-size:22px;
+    font-weight:700;
+}
+
+.btc{
+    background:linear-gradient(145deg,#ffd55c,#eaa62b);
+}
+
+.eth{
+    background:linear-gradient(145deg,#8c99df,#56629e);
+}
+
+.usdc{
+    background:linear-gradient(145deg,#4389e9,#1d549e);
+}
+
+.coin-name{
+    font-size:13px;
+    font-weight:600;
+}
+
+.coin-price{
+    color:#9698a8;
+    font-size:10px;
+    margin-top:3px;
+}
+
+.change{
+    color:#8eeb4c;
+    margin-left:4px;
+}
+
+.asset-right{
+    text-align:right;
+}
+
+.crypto{
+    color:#a39aff;
+    font-size:12px;
+}
+
+.value{
+    color:#a3a4b3;
+    font-size:10px;
+    margin-top:4px;
+}
+
+
+/* =========================================================
+   SWAP SCREEN
+========================================================= */
+
+.swap-title{
+    text-align:center;
+
+    color:#d0d0d8;
+
+    font-size:27px;
+    font-weight:500;
+
+    margin-top:38px;
+}
+
+.swap-panel{
+    position:relative;
+
+    height:290px;
+
+    padding:56px 40px 20px;
+}
+
+.swap-top{
+    background:
+        linear-gradient(
+            180deg,
+            rgba(44,47,68,.35),
+            rgba(25,27,44,.08)
+        );
+}
+
+.swap-bottom{
+    height:335px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(45,76,150,.7),
+            rgba(79,43,143,.55) 13%,
+            rgba(35,37,59,.12) 50%
+        );
+}
+
+.swap-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.swap-label,
+.swap-balance{
+    color:#c7c7d0;
+    font-size:17px;
+    font-weight:600;
+}
+
+.token{
+    width:247px;
+    height:99px;
+
+    margin-top:35px;
+
+    border-radius:50px;
+
+    border:1px solid rgba(255,255,255,.13);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.09),
+            rgba(255,255,255,.035)
+        );
+
+    display:flex;
+    align-items:center;
+
+    padding:9px 18px;
+
+    gap:18px;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.token:hover{
+    background:rgba(255,255,255,.13);
+}
+
+.token-icon{
+    width:62px;
+    height:62px;
+
+    border-radius:16px;
+
+    display:grid;
+    place-items:center;
+
+    font-size:34px;
+}
+
+.token-icon.btc{
+    background:linear-gradient(145deg,#ffd55c,#efa92b);
+}
+
+.token-icon.eth{
+    background:linear-gradient(145deg,#8e99dd,#55629c);
+}
+
+.token-name{
+    font-size:28px;
+    font-weight:650;
+}
+
+.chevron{
+    margin-left:auto;
+    color:#9d9eab;
+    font-size:26px;
+}
+
+.amount{
+    position:absolute;
+
+    top:112px;
+    right:40px;
+
+    font-size:68px;
+    font-weight:700;
+
+    letter-spacing:-3px;
+}
+
+.amount .euro{
+    color:#858795;
+}
+
+.amount .zero{
+    color:white;
+}
+
+.swap-divider{
+    height:2px;
+
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    top:290px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #315bb7,
+            #8142d2,
+            #315bb7
+        );
+
+    z-index:10;
+}
+
+.swap-center{
+    position:absolute;
+
+    left:50%;
+    top:242px;
+
+    transform:translateX(-50%);
+
+    width:100px;
+    height:100px;
+
+    border-radius:50%;
+
+    border:1px solid rgba(255,255,255,.2);
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            rgba(135,109,224,.5),
+            rgba(75,51,137,.9)
+        );
+
+    color:#aaa2bd;
+
+    font-size:44px;
+
+    display:grid;
+    place-items:center;
+
+    cursor:pointer;
+
+    z-index:30;
+
+    transition:.25s;
+}
+
+.swap-center:hover{
+    transform:translateX(-50%) scale(1.06);
+    color:white;
+}
+
+.minmax{
+    width:350px;
+    height:98px;
+
+    margin:10px auto 0;
+
+    border-radius:55px;
+
+    background:rgba(10,11,23,.28);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+
+    color:#b8b9c4;
+
+    font-size:30px;
+}
+
+.minmax button{
+    width:50%;
+    height:100%;
+
+    border:0;
+
+    background:transparent;
+
+    color:#b8b9c4;
+
+    font-size:30px;
+
+    cursor:pointer;
+}
+
+.minmax button:hover{
+    color:white;
+}
+
+.provider{
+    position:absolute;
+
+    bottom:105px;
+
+    left:25px;
+    right:25px;
+
+    text-align:center;
+
+    color:#747585;
+
+    font-size:16px;
+
+    line-height:1.4;
+}
+
+
+/* =========================================================
+   CASH SCREEN
+========================================================= */
+
+.cash-screen{
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(50,67,111,.22),
+            transparent 35%
+        );
+}
+
+.cash-top{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 17px;
+}
+
+.cash-title-area{
+    text-align:center;
+
+    margin-top:47px;
+}
+
+.cash-orb{
+    width:139px;
+    height:139px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    display:grid;
+    place-items:center;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #baff71,
+            #27dd30 48%,
+            #10a72b 100%
+        );
+
+    box-shadow:
+        0 0 20px rgba(73,244,48,.7),
+        0 0 55px rgba(73,244,48,.3);
+
+    animation:
+        orbPulse 3s ease-in-out infinite;
+}
+
+.cash-dollar{
+    font-size:70px;
+    font-weight:500;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,.15);
+}
+
+@keyframes orbPulse{
+
+    0%,100%{
+        box-shadow:
+            0 0 20px rgba(73,244,48,.6),
+            0 0 55px rgba(73,244,48,.25);
+    }
+
+    50%{
+        box-shadow:
+            0 0 30px rgba(73,244,48,.85),
+            0 0 75px rgba(73,244,48,.38);
+    }
+
+}
+
+.cash-heading{
+    margin-top:39px;
+
+    font-size:31px;
+    font-weight:800;
+
+    letter-spacing:-1px;
+}
+
+.cash-subheading{
+    font-size:31px;
+    font-weight:800;
+
+    color:#aaaab7;
+
+    margin-top:0;
+}
+
+.add-money{
+    margin-top:88px;
+
+    padding:11px 22px;
+
+    border-radius:25px;
+
+    border:1px solid rgba(255,255,255,.13);
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:white;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.add-money:hover{
+    background:rgba(255,255,255,.1);
+    transform:translateY(-2px);
+}
+
+
+/* =========================================================
+   REWARD CARD
+========================================================= */
+
+.reward-card{
+    height:273px;
+
+    margin:
+        38px
+        18px
+        0;
+
+    border-radius:43px;
+
+    overflow:hidden;
+
+    position:relative;
+
+    border:1px solid rgba(255,255,255,.11);
+
+    background:
+        linear-gradient(
+            135deg,
+            #313b48,
+            #267536 50%,
+            #52c832
+        );
+
+    padding:34px;
+}
+
+.reward-card:after{
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    right:-35px;
+    bottom:-90px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle at 40% 30%,
+            #83ff67,
+            #16c627 65%,
+            #099c20
+        );
+
+    box-shadow:
+        0 0 30px rgba(52,244,44,.35);
+}
+
+.reward-title{
+    font-size:18px;
+    font-weight:750;
+}
+
+.reward-text{
+    color:#c3c4cc;
+
+    font-size:15px;
+
+    line-height:1.4;
+
+    margin-top:8px;
+}
+
+.start-button{
+    position:absolute;
+
+    left:34px;
+    bottom:32px;
+
+    padding:11px 20px;
+
+    border-radius:24px;
+
+    border:1px solid rgba(255,255,255,.13);
+
+    background:
+        linear-gradient(
+            135deg,
+            #38c936,
+            #28a72c
+        );
+
+    color:white;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    z-index:4;
+
+    transition:.2s;
+}
+
+.start-button:hover{
+    transform:scale(1.04);
+}
+
+.gift-large{
+    position:absolute;
+
+    z-index:5;
+
+    right:37px;
+    bottom:-4px;
+
+    font-size:80px;
+
+    filter:
+        drop-shadow(0 5px 7px rgba(0,0,0,.25));
+}
+
+
+/* =========================================================
+   CASH BALANCE
+========================================================= */
+
+.cash-balance{
+    margin-top:28px;
+
+    text-align:center;
+
+    color:#77798b;
+
+    font-size:17px;
+}
+
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+.bottom-nav{
+    position:absolute;
+
+    left:50%;
+    bottom:19px;
+
+    transform:translateX(-50%);
+
+    width:350px;
+    height:80px;
+
+    border-radius:45px;
+
+    border:1px solid rgba(255,255,255,.12);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.09),
+            rgba(255,255,255,.035)
+        );
+
+    backdrop-filter:blur(20px);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+
+    z-index:100;
+}
+
+.nav-button{
+    width:82px;
+    height:60px;
+
+    border:0;
+
+    border-radius:30px;
+
+    background:transparent;
+
+    color:#9697a7;
+
+    cursor:pointer;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:3px;
+
+    transition:.25s;
+}
+
+.nav-button svg{
+    width:27px;
+    height:27px;
+}
+
+.nav-button span{
+    font-size:8px;
+}
+
+.nav-button:hover{
+    color:white;
+}
+
+.nav-button.active{
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(125,91,236,.65),
+            rgba(92,57,188,.55)
+        );
+
+    box-shadow:
+        0 0 25px rgba(115,79,229,.2);
+}
+
+
+/* CASH ACTIVE */
+
+.nav-button.cash-active{
+    color:white;
+
+    background:
+        radial-gradient(
+            circle,
+            #66ef42,
+            #2cc72e
+        );
+
+    box-shadow:
+        0 0 25px rgba(63,240,54,.4);
+}
+
+.cash-icon{
+    font-size:26px;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.72);
+
+    backdrop-filter:blur(10px);
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    z-index:200;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:360px;
+    max-width:90%;
+
+    border-radius:27px;
+
+    padding:25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #2b2a46,
+            #151624
+        );
+
+    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.6);
+}
+
+.modal-header{
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:20px;
+}
+
+.modal-header h2{
+    font-size:21px;
+}
+
+.close{
+    width:34px;
+    height:34px;
+
+    border:0;
+
+    border-radius:11px;
+
+    background:rgba(255,255,255,.08);
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:20px;
+}
+
+.label{
+    color:#999aaa;
+
+    font-size:11px;
+
+    margin-top:13px;
+}
+
+.input{
+    width:100%;
+
+    margin-top:7px;
+
+    padding:14px;
+
+    border-radius:13px;
+
+    border:1px solid rgba(255,255,255,.09);
+
+    background:rgba(0,0,0,.2);
+
+    color:white;
+
+    outline:none;
+}
+
+.submit{
+    width:100%;
+
+    margin-top:20px;
+
+    padding:14px;
+
+    border:0;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #805af0,
+            #5e3fc3
+        );
+
+    color:white;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+
+    left:50%;
+    bottom:115px;
+
+    transform:
+        translate(-50%,30px);
+
+    opacity:0;
+
+    padding:12px 18px;
+
+    border-radius:14px;
+
+    background:#171824;
+
+    border:1px solid rgba(255,255,255,.1);
+
+    color:white;
+
+    font-size:12px;
+
+    z-index:300;
+
+    transition:.3s;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:
+        translate(-50%,0);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:500px){
+
+    body{
+        background:#202236;
+    }
+
+    .phone{
+        width:100%;
+        box-shadow:none;
+    }
+
+    .amount{
+        right:25px;
+        font-size:55px;
+    }
+
+    .swap-panel{
+        padding-left:40px;
+        padding-right:25px;
+    }
+
+    .bottom-nav{
+        width:calc(100% - 70px);
+    }
+
+    .reward-card{
+        margin-left:18px;
+        margin-right:18px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="phone">
+
+
+<!-- =====================================================
+     WALLET SCREEN
+===================================================== -->
+
+<section
+    id="walletScreen"
+    class="screen active"
+>
+
+    <div class="statusbar">
+
+        <div
+            class="time"
+            id="clock1"
+        >
+            5:20
+        </div>
+
+        <div class="status-right">
+
+            <div class="signal">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </div>
+
+            <span>4G</span>
+
+            <div class="battery">
+                36
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="wallet-top">
+
+        <button
+            class="profile-circle reference-logo-button"
+            onclick="toggleProfilePanel()"
+            aria-label="Profile"
+        >
+            <div class="profile-logo reference-logo"></div>
+        </button>
+
+        <button
+            class="gift-button reference-search-button"
+            onclick="showMessage('Search')"
+            aria-label="Search"
+        >
+            <span class="reference-search-icon"></span>
+        </button>
+
+    </div>
+
+
+    <div class="balance-area">
+
+        <div class="ring">
+
+            <svg viewBox="0 0 300 300">
+
+                <circle
+                    class="ring-bg"
+                    cx="150"
+                    cy="150"
+                    r="115"
+                />
+
+                <circle
+                    class="segment seg1"
+                    cx="150"
+                    cy="150"
+                    r="115"
+                />
+
+                <circle
+                    class="segment seg2"
+                    cx="150"
+                    cy="150"
+                    r="115"
+                />
+
+                <circle
+                    class="segment seg3"
+                    cx="150"
+                    cy="150"
+                    r="115"
+                />
+
+                <circle
+                    class="segment seg4"
+                    cx="150"
+                    cy="150"
+                    r="115"
+                />
+
+                <circle
+                    class="segment seg5"
+                    cx="150"
+                    cy="150"
+                    r="115"
+                />
+
+                <circle
+                    class="segment seg6"
+                    cx="150"
+                    cy="150"
+                    r="115"
+                />
+
+                <circle
+                    class="segment seg7"
+                    cx="150"
+                    cy="150"
+                    r="115"
+                />
+
+            </svg>
+
+
+            <div class="balance">
+
+                <span class="symbol">€</span>
+
+                <span class="number" id="walletTotalNumber">
+                    1,330
+                </span>
+
+                <span class="decimal" id="walletTotalDecimal">
+                    .36
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="actions">
+
+            <button
+                class="action primary"
+                onclick="openModal('Buy')"
+            >
+                ＋ Buy
+            </button>
+
+            <button
+                class="action"
+                onclick="openSwap()"
+            >
+                ⇄ Transfer
+            </button>
+
+            <button
+                class="action"
+                onclick="openModal('Sell')"
+            >
+                ↑ Sell
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="assets">
+
+        <div
+            class="asset"
+            onclick="openModal('Bitcoin')"
+        >
+
+            <div class="asset-left">
+
+                <div class="coin btc">
+                    ₿
+                </div>
+
+                <div>
+
+                    <div class="coin-name">
+                        Bitcoin
+                    </div>
+
+                    <div class="coin-price">
+                        $71,531.78
+
+                        <span class="change">
+                            +1.05%
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="asset-right">
+
+                <div class="crypto" id="btcCrypto">
+                    0.012047 BTC
+                </div>
+
+                <div class="value" id="btcValue">
+                    $801.96
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="asset"
+            onclick="openModal('Ethereum')"
+        >
+
+            <div class="asset-left">
+
+                <div class="coin eth">
+                    ♦
+                </div>
+
+                <div>
+
+                    <div class="coin-name">
+                        Ethereum
+                    </div>
+
+                    <div class="coin-price">
+                        $2,730.28
+
+                        <span class="change">
+                            +1.05%
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="asset-right">
+
+                <div class="crypto" id="ethCrypto">
+                    0.1540181 ETH
+                </div>
+
+                <div class="value" id="ethValue">
+                    $322.50
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="asset"
+            onclick="openModal('USDC')"
+        >
+
+            <div class="asset-left">
+
+                <div class="coin usdc">
+                    $
+                </div>
+
+                <div>
+
+                    <div class="coin-name">
+                        USDC
+                    </div>
+
+                    <div class="coin-price">
+                        $1.00
+
+                        <span class="change">
+                            +1.05%
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="asset-right">
+
+                <div class="crypto" id="usdcCrypto">
+                    89.2123 USDC
+                </div>
+
+                <div class="value" id="usdcValue">
+                    $89.21
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SWAP SCREEN
+===================================================== -->
+
+<section
+    id="swapScreen"
+    class="screen"
+>
+
+    <div class="statusbar">
+
+        <div class="time">
+            5:20
+        </div>
+
+        <div class="status-right">
+
+            <div class="signal">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </div>
+
+            <span>4G</span>
+
+            <div class="battery">
+                36
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <h1 class="swap-title">
+        Swap
+    </h1>
+
+
+    <div class="swap-panel swap-top">
+
+        <div class="swap-row">
+
+            <div class="swap-label">
+                I have 0 Bitcoin
+            </div>
+
+            <div class="swap-balance">
+                0 BTC
+            </div>
+
+        </div>
+
+
+        <button
+            class="token"
+            onclick="showMessage('Bitcoin selector')"
+        >
+
+            <div class="token-icon btc">
+                ₿
+            </div>
+
+            <div class="token-name">
+                BTC
+            </div>
+
+            <div class="chevron">
+                ⌄
+            </div>
+
+        </button>
+
+
+        <div class="amount">
+
+            <span class="euro">
+                €
+            </span>
+
+            <span class="zero">
+                0.00
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="swap-divider"></div>
+
+
+    <button
+        class="swap-center"
+        onclick="reverseSwap()"
+    >
+        ⇅
+    </button>
+
+
+    <div class="swap-panel swap-bottom">
+
+        <div class="swap-row">
+
+            <div class="swap-label">
+                I want
+            </div>
+
+            <div class="swap-balance">
+                0 ETH
+            </div>
+
+        </div>
+
+
+        <button
+            class="token"
+            onclick="showMessage('Ethereum selector')"
+        >
+
+            <div class="token-icon eth">
+                ♦
+            </div>
+
+            <div class="token-name">
+                ETH
+            </div>
+
+            <div class="chevron">
+                ⌄
+            </div>
+
+        </button>
+
+
+        <div class="amount">
+
+            <span class="euro">
+                €
+            </span>
+
+            <span class="zero">
+                0.00
+            </span>
+
+        </div>
+
+
+        <div class="minmax">
+
+            <button onclick="setMinimum()">
+                Min
+            </button>
+
+            <button onclick="setMaximum()">
+                Max
+            </button>
+
+        </div>
+
+
+        <div class="provider">
+            Swap services are available<br>
+            through third-party providers.
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CASH SCREEN
+===================================================== -->
+
+<section
+    id="cashScreen"
+    class="screen cash-screen"
+>
+
+    <div class="statusbar">
+
+        <div
+            class="time"
+            id="clock2"
+        >
+            5:20
+        </div>
+
+        <div class="status-right">
+
+            <div class="signal">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </div>
+
+            <span>4G</span>
+
+            <div class="battery">
+                36
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="cash-top">
+
+        <button
+            class="profile-circle"
+            onclick="showMessage('Cash profile')"
+        >
+            <div class="profile-logo"></div>
+        </button>
+
+
+        <button
+            class="gift-button"
+            onclick="showReward()"
+        >
+            ♧
+        </button>
+
+    </div>
+
+
+    <div class="cash-title-area">
+
+        <div class="cash-orb">
+
+            <div class="cash-dollar">
+                $
+            </div>
+
+        </div>
+
+
+        <h1 class="cash-heading">
+            Spend cash
+        </h1>
+
+        <div class="cash-subheading">
+            everywhere
+        </div>
+
+
+        <button
+            class="add-money"
+            onclick="addMoney()"
+        >
+            ＋ Add money
+        </button>
+
+    </div>
+
+
+    <div class="reward-card">
+
+        <div class="reward-title">
+            Unlock your reward
+        </div>
+
+        <div class="reward-text">
+            Get started and complete<br>
+            your first steps.
+        </div>
+
+
+        <button
+            class="start-button"
+            onclick="startReward()"
+        >
+            Start
+        </button>
+
+
+        <div class="gift-large">
+            🎁
+        </div>
+
+    </div>
+
+
+    <div class="cash-balance">
+        Cash balance · €0.00
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PROFILE / SETTINGS PANEL
+===================================================== -->
+
+<div class="profile-panel" id="profilePanel">
+
+    <div class="profile-panel-handle"></div>
+
+    <button class="profile-close" onclick="toggleProfilePanel()" aria-label="Close profile">
+        ×
+    </button>
+
+    <div class="profile-panel-content">
+
+        <div class="profile-avatar-large">
+            <div class="profile-avatar-logo"></div>
+        </div>
+
+        <h1 class="profile-name">Exodus</h1>
+
+        <div class="profile-list">
+
+            <div class="profile-row">
+                <div class="profile-row-icon">＄</div>
+                <div class="profile-row-label">Use Pay as default</div>
+                <button class="profile-toggle" aria-label="Use Pay as default"></button>
+            </div>
+
+            <button class="profile-row profile-row-button" onclick="openAccountNameSettings()" type="button">
+                <div class="profile-row-icon">☷</div>
+                <div class="profile-row-label">Settings</div>
+                <div class="profile-row-chevron">›</div>
+            </button>
+
+            <div class="profile-row">
+                <div class="profile-row-icon">◉</div>
+                <div class="profile-row-label">Support</div>
+                <div class="profile-row-chevron">›</div>
+            </div>
+
+            <div class="profile-row" style="min-height:78px;">
+                <div class="profile-row-icon">↔</div>
+                <button
+                    class="profile-row-label"
+                    onclick="openAmountSettings()"
+                    style="background:none;border:0;color:white;text-align:left;padding:0;font:inherit;cursor:pointer;"
+                >
+                    Change amount
+                </button>
+                <div class="profile-row-chevron">›</div>
+            </div>
+
+        </div>
+
+        <div class="profile-nft-card">
+            <div class="profile-nft-icon">🔷</div>
+            <div class="profile-nft-label">NFTs</div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<!-- =====================================================
+     ACCOUNT NAME SETTINGS
+===================================================== -->
+
+<div class="account-name-settings" id="accountNameSettings">
+    <div class="account-name-settings-inner">
+        <div class="account-name-settings-header">
+            <button class="account-name-back" onclick="closeAccountNameSettings()" aria-label="Back">‹</button>
+            <h2 class="account-name-settings-title">Settings</h2>
+            <div style="width:44px;height:44px;"></div>
+        </div>
+
+        <div class="account-name-card">
+            <label class="account-name-label" for="accountNameInput">Wallet name</label>
+            <input id="accountNameInput" class="account-name-input" type="text" value="Exodus" maxlength="30" autocomplete="off">
+            <button class="account-name-save" onclick="saveAccountName()" type="button">Save</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- =====================================================
+     CHANGE AMOUNT SETTINGS — SCREENSHOT STYLE
+===================================================== -->
+
+<div class="amount-settings" id="amountSettings">
+<div class="amount-settings-inner">
+<div class="amount-settings-header"><div><div class="amount-settings-title">Assets</div><div class="amount-settings-subtitle">Edit your balances directly</div></div><button class="amount-settings-close" onclick="closeAmountSettings()" aria-label="Close">×</button></div>
+<div class="amount-section-label">YOUR ASSETS</div>
+<div class="coin-settings-list">
+<div class="coin-settings-row"><div class="coin-icon btc">₿</div><div class="coin-main"><div class="coin-name">Bitcoin</div><div class="coin-price">€73,771.23 <span class="coin-change">+0.4%</span></div></div><div><div class="coin-symbol">BTC</div><input class="coin-balance" id="amountBTC" type="number" min="0" step="0.00000001" value="0.012047" oninput="updateWalletAmounts()" aria-label="Bitcoin amount"><div class="coin-fiat" id="coinFiatBTC">€0.00</div></div></div>
+<div class="coin-settings-row"><div class="coin-icon eth">◆</div><div class="coin-main"><div class="coin-name">Ethereum</div><div class="coin-price">€2,358.99 <span class="coin-change">+0.2%</span></div></div><div><div class="coin-symbol">ETH</div><input class="coin-balance" id="amountETH" type="number" min="0" step="0.000000000000000001" value="0.1540181" oninput="updateWalletAmounts()" aria-label="Ethereum amount"><div class="coin-fiat" id="coinFiatETH">€0.00</div></div></div>
+<div class="coin-settings-row"><div class="coin-icon usdt">₮</div><div class="coin-main"><div class="coin-name">Tether USD</div><div class="coin-price">€0.8777 </div></div><div><div class="coin-symbol">USDT</div><input class="coin-balance" id="amountUSDT" type="number" min="0" step="0.000001" value="0" oninput="updateWalletAmounts()" aria-label="Tether USD amount"><div class="coin-fiat" id="coinFiatUSDT">€0.00</div></div></div>
+<div class="coin-settings-row"><div class="coin-icon bnb">◆</div><div class="coin-main"><div class="coin-name">BNB</div><div class="coin-price">€678.57 <span class="coin-change">+0.2%</span></div></div><div><div class="coin-symbol">BNB</div><input class="coin-balance" id="amountBNB" type="number" min="0" step="0.00000001" value="0" oninput="updateWalletAmounts()" aria-label="BNB amount"><div class="coin-fiat" id="coinFiatBNB">€0.00</div></div></div>
+<div class="coin-settings-row"><div class="coin-icon xrp">×</div><div class="coin-main"><div class="coin-name">XRP</div><div class="coin-price">€1.35 <span class="coin-change down">-1.4%</span></div></div><div><div class="coin-symbol">XRP</div><input class="coin-balance" id="amountXRP" type="number" min="0" step="0.000001" value="0" oninput="updateWalletAmounts()" aria-label="XRP amount"><div class="coin-fiat" id="coinFiatXRP">€0.00</div></div></div>
+<div class="coin-settings-row"><div class="coin-icon usdc">$</div><div class="coin-main"><div class="coin-name">USDC</div><div class="coin-price">€0.8778 </div></div><div><div class="coin-symbol">USDC</div><input class="coin-balance" id="amountUSDC" type="number" min="0" step="0.000001" value="89.2123" oninput="updateWalletAmounts()" aria-label="USDC amount"><div class="coin-fiat" id="coinFiatUSDC">€0.00</div></div></div>
+<div class="coin-settings-row"><div class="coin-icon sol">≋</div><div class="coin-main"><div class="coin-name">Solana</div><div class="coin-price">€106.26 <span class="coin-change">+0.2%</span></div></div><div><div class="coin-symbol">SOL</div><input class="coin-balance" id="amountSOL" type="number" min="0" step="0.000000001" value="0" oninput="updateWalletAmounts()" aria-label="Solana amount"><div class="coin-fiat" id="coinFiatSOL">€0.00</div></div></div>
+<div class="coin-settings-row"><div class="coin-icon trx">△</div><div class="coin-main"><div class="coin-name">Tron</div><div class="coin-price">€0.2952 <span class="coin-change">+0.1%</span></div></div><div><div class="coin-symbol">TRX</div><input class="coin-balance" id="amountTRX" type="number" min="0" step="0.000001" value="0" oninput="updateWalletAmounts()" aria-label="Tron amount"><div class="coin-fiat" id="coinFiatTRX">€0.00</div></div></div>
+<div class="coin-settings-row"><div class="coin-icon doge">Ð</div><div class="coin-main"><div class="coin-name">Dogecoin</div><div class="coin-price">€0.0859 <span class="coin-change">+0.4%</span></div></div><div><div class="coin-symbol">DOGE</div><input class="coin-balance" id="amountDOGE" type="number" min="0" step="0.000001" value="0" oninput="updateWalletAmounts()" aria-label="Dogecoin amount"><div class="coin-fiat" id="coinFiatDOGE">€0.00</div></div></div>
+<div class="coin-settings-row"><div class="coin-icon ada">✦</div><div class="coin-main"><div class="coin-name">Cardano</div><div class="coin-price">€0.225 <span class="coin-change">+1.1%</span></div></div><div><div class="coin-symbol">ADA</div><input class="coin-balance" id="amountADA" type="number" min="0" step="0.000001" value="0" oninput="updateWalletAmounts()" aria-label="Cardano amount"><div class="coin-fiat" id="coinFiatADA">€0.00</div></div></div>
+<div class="coin-settings-row"><div class="coin-icon ltc">Ł</div><div class="coin-main"><div class="coin-name">Litecoin</div><div class="coin-price">€63.61 <span class="coin-change">+4.7%</span></div></div><div><div class="coin-symbol">LTC</div><input class="coin-balance" id="amountLTC" type="number" min="0" step="0.00000001" value="0" oninput="updateWalletAmounts()" aria-label="Litecoin amount"><div class="coin-fiat" id="coinFiatLTC">€0.00</div></div></div>
+</div>
+<button class="coin-add-more" type="button" onclick="showMessage('Add more assets')">Add More</button>
+<div class="amount-total-card"><div class="amount-total-label">TOTAL VALUE</div><div class="amount-total-value" id="amountTotalValue">€0.00</div></div>
+<button class="amount-save" onclick="saveAmountSettings()">Save amounts</button>
+</div></div>
+
+<!-- =====================================================
+     BOTTOM NAVIGATION
+===================================================== -->
+
+<nav class="bottom-nav">
+
+
+    <!-- WALLET -->
+
+    <button
+        id="walletNav"
+        class="nav-button active"
+        onclick="openWallet()"
+    >
+
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+        >
+
+            <rect
+                x="3"
+                y="5"
+                width="18"
+                height="15"
+                rx="3"
+            />
+
+            <path d="M3 9h18"/>
+
+            <circle
+                cx="17"
+                cy="14"
+                r="1"
+            />
+
+        </svg>
+
+        <span>
+            Wallet
+        </span>
+
+    </button>
+
+
+    <!-- TRANSFER -->
+
+    <button
+        id="swapNav"
+        class="nav-button"
+        onclick="openSwap()"
+    >
+
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+        >
+
+            <path d="M4 8h14"/>
+            <path d="M15 4l4 4-4 4"/>
+
+            <path d="M20 16H6"/>
+            <path d="M9 12l-4 4 4 4"/>
+
+        </svg>
+
+        <span>
+            Transfer
+        </span>
+
+    </button>
+
+
+    <!-- CASH -->
+
+    <button
+        id="cashNav"
+        class="nav-button"
+        onclick="openCash()"
+    >
+
+        <div class="cash-icon">
+            $
+        </div>
+
+        <span>
+            Cash
+        </span>
+
+    </button>
+
+</nav>
+
+</div>
+
+
+
+<!-- =====================================================
+     MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="modal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                Buy
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="label">
+            Asset
+        </div>
+
+        <select class="input">
+
+            <option>Bitcoin (BTC)</option>
+            <option>Ethereum (ETH)</option>
+            <option>USDC</option>
+
+        </select>
+
+
+        <div class="label">
+            Amount
+        </div>
+
+        <input
+            class="input"
+            placeholder="0.00"
+        >
+
+
+        <button
+            class="submit"
+            onclick="demoSubmit()"
+        >
+            Continue
+        </button>
+
+    </div>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+
+<script>
+
+/* =========================================================
+   SCREEN REFERENCES
+========================================================= */
+
+const walletScreen =
+    document.getElementById("walletScreen");
+
+const swapScreen =
+    document.getElementById("swapScreen");
+
+const cashScreen =
+    document.getElementById("cashScreen");
+
+const walletNav =
+    document.getElementById("walletNav");
+
+const swapNav =
+    document.getElementById("swapNav");
+
+const cashNav =
+    document.getElementById("cashNav");
+
+
+/* =========================================================
+   RESET NAVIGATION
+========================================================= */
+
+function resetNav(){
+
+    walletNav.classList.remove("active");
+    swapNav.classList.remove("active");
+    cashNav.classList.remove("active");
+
+    cashNav.classList.remove("cash-active");
+
+}
+
+
+/* =========================================================
+   WALLET
+========================================================= */
+
+function openWallet(){
+
+    walletScreen.classList.add("active");
+
+    swapScreen.classList.remove("active");
+
+    cashScreen.classList.remove("active");
+
+    resetNav();
+
+    walletNav.classList.add("active");
+
+}
+
+
+/* =========================================================
+   SWAP
+========================================================= */
+
+function openSwap(){
+
+    walletScreen.classList.remove("active");
+
+    swapScreen.classList.add("active");
+
+    cashScreen.classList.remove("active");
+
+    resetNav();
+
+    swapNav.classList.add("active");
+
+}
+
+
+/* =========================================================
+   CASH
+========================================================= */
+
+function openCash(){
+
+    walletScreen.classList.remove("active");
+
+    swapScreen.classList.remove("active");
+
+    cashScreen.classList.add("active");
+
+    resetNav();
+
+    cashNav.classList.add("cash-active");
+
+}
+
+
+/* =========================================================
+   PROFILE / SETTINGS PANEL
+========================================================= */
+
+const profilePanel =
+    document.getElementById("profilePanel");
+
+function toggleProfilePanel(){
+
+    profilePanel.classList.toggle("show");
+
+}
+
+const accountNameSettings =
+    document.getElementById("accountNameSettings");
+
+const accountNameInput =
+    document.getElementById("accountNameInput");
+
+function openAccountNameSettings(){
+    profilePanel.classList.remove("show");
+    accountNameInput.value = document.querySelector(".profile-name").textContent.trim();
+    accountNameSettings.classList.add("show");
+    setTimeout(() => accountNameInput.focus(), 50);
+}
+
+function closeAccountNameSettings(){
+    accountNameSettings.classList.remove("show");
+}
+
+function saveAccountName(){
+    const name = accountNameInput.value.trim() || "Exodus";
+    document.querySelector(".profile-name").textContent = name;
+    accountNameSettings.classList.remove("show");
+    showMessage("Wallet name updated");
+}
+
+
+
+/* =========================================================
+   CHANGE AMOUNT SETTINGS
+========================================================= */
+const amountSettings=document.getElementById("amountSettings");
+const coinPrices={BTC:73771.23,ETH:2358.99,USDT:0.8777,BNB:678.57,XRP:1.35,USDC:0.8778,SOL:106.26,TRX:0.2952,DOGE:0.0859,ADA:0.225,LTC:63.61};
+const coinInputIds={BTC:"amountBTC",ETH:"amountETH",USDT:"amountUSDT",BNB:"amountBNB",XRP:"amountXRP",USDC:"amountUSDC",SOL:"amountSOL",TRX:"amountTRX",DOGE:"amountDOGE",ADA:"amountADA",LTC:"amountLTC"};
+function openAmountSettings(){profilePanel.classList.remove("show");amountSettings.classList.add("show");updateWalletAmounts();}
+function closeAmountSettings(){amountSettings.classList.remove("show");}
+function readAmount(id){const el=document.getElementById(id);const value=parseFloat(el?el.value:0);return Number.isFinite(value)&&value>=0?value:0;}
+function euro(value){return new Intl.NumberFormat("en-IE",{style:"currency",currency:"EUR",minimumFractionDigits:2,maximumFractionDigits:2}).format(value);}
+function cryptoAmount(value,digits){return value.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:digits});}
+function updateWalletAmounts(){let total=0;Object.keys(coinInputIds).forEach(symbol=>{const amount=readAmount(coinInputIds[symbol]);const fiat=amount*coinPrices[symbol];total+=fiat;const fiatEl=document.getElementById("coinFiat"+symbol);if(fiatEl)fiatEl.textContent=euro(fiat);});const totalFixed=total.toFixed(2).split(".");const walletNumber=document.getElementById("walletTotalNumber");const walletDecimal=document.getElementById("walletTotalDecimal");if(walletNumber)walletNumber.textContent=Number(totalFixed[0]).toLocaleString("en-US");if(walletDecimal)walletDecimal.textContent="."+totalFixed[1];const amountTotal=document.getElementById("amountTotalValue");if(amountTotal)amountTotal.textContent=euro(total);const btc=readAmount("amountBTC"),eth=readAmount("amountETH"),usdc=readAmount("amountUSDC");const btcCrypto=document.getElementById("btcCrypto"),btcValue=document.getElementById("btcValue"),ethCrypto=document.getElementById("ethCrypto"),ethValue=document.getElementById("ethValue"),usdcCrypto=document.getElementById("usdcCrypto"),usdcValue=document.getElementById("usdcValue");if(btcCrypto)btcCrypto.textContent=cryptoAmount(btc,8)+" BTC";if(btcValue)btcValue.textContent=euro(btc*coinPrices.BTC);if(ethCrypto)ethCrypto.textContent=cryptoAmount(eth,18)+" ETH";if(ethValue)ethValue.textContent=euro(eth*coinPrices.ETH);if(usdcCrypto)usdcCrypto.textContent=cryptoAmount(usdc,6)+" USDC";if(usdcValue)usdcValue.textContent=euro(usdc*coinPrices.USDC);}
+function saveAmountSettings(){updateWalletAmounts();closeAmountSettings();showMessage("Wallet amounts updated");}
+amountSettings.addEventListener("click",function(event){if(event.target===amountSettings)closeAmountSettings();});
+
+updateWalletAmounts();
+
+/* =========================================================
+   SWAP DIRECTION
+========================================================= */
+
+let reversed = false;
+
+
+function reverseSwap(){
+
+    const topLabel =
+        document.querySelector(
+            ".swap-top .swap-label"
+        );
+
+    const topBalance =
+        document.querySelector(
+            ".swap-top .swap-balance"
+        );
+
+    const bottomBalance =
+        document.querySelector(
+            ".swap-bottom .swap-balance"
+        );
+
+    const topToken =
+        document.querySelector(
+            ".swap-top .token-name"
+        );
+
+    const bottomToken =
+        document.querySelector(
+            ".swap-bottom .token-name"
+        );
+
+
+    if(!reversed){
+
+        topLabel.textContent =
+            "I have 0 Ethereum";
+
+        topBalance.textContent =
+            "0 ETH";
+
+        topToken.textContent =
+            "ETH";
+
+        bottomBalance.textContent =
+            "0 BTC";
+
+        bottomToken.textContent =
+            "BTC";
+
+        reversed = true;
+
+    }else{
+
+        topLabel.textContent =
+            "I have 0 Bitcoin";
+
+        topBalance.textContent =
+            "0 BTC";
+
+        topToken.textContent =
+            "BTC";
+
+        bottomBalance.textContent =
+            "0 ETH";
+
+        bottomToken.textContent =
+            "ETH";
+
+        reversed = false;
+
+    }
+
+    showMessage("Swap direction changed");
+
+}
+
+
+/* =========================================================
+   MIN / MAX
+========================================================= */
+
+function setMinimum(){
+
+    showMessage("Minimum amount selected");
+
+}
+
+
+function setMaximum(){
+
+    showMessage("Maximum amount selected");
+
+}
+
+
+/* =========================================================
+   CASH
+========================================================= */
+
+function addMoney(){
+
+    openModal("Add money");
+
+}
+
+
+function startReward(){
+
+    showMessage(
+        "Reward setup started"
+    );
+
+}
+
+
+function showReward(){
+
+    showMessage(
+        "Your rewards"
+    );
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+const modal =
+    document.getElementById("modal");
+
+const modalTitle =
+    document.getElementById("modalTitle");
+
+
+function openModal(title){
+
+    modalTitle.textContent =
+        title;
+
+    modal.classList.add("show");
+
+}
+
+
+function closeModal(){
+
+    modal.classList.remove("show");
+
+}
+
+
+function demoSubmit(){
+
+    closeModal();
+
+    showMessage(
+        "Demo action completed — no real transaction."
+    );
+
+}
+
+
+modal.addEventListener(
+    "click",
+    function(event){
+
+        if(event.target === modal){
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+const toastBox =
+    document.getElementById("toast");
+
+let toastTimer;
+
+
+function showMessage(message){
+
+    toastBox.textContent =
+        message;
+
+    toastBox.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(
+            () => {
+                toastBox.classList.remove("show");
+            },
+            2200
+        );
+
+}
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock(){
+
+    const now =
+        new Date();
+
+    let hours =
+        now.getHours();
+
+    let minutes =
+        now.getMinutes();
+
+    minutes =
+        String(minutes)
+            .padStart(2,"0");
+
+    const time =
+        hours + ":" + minutes;
+
+    document.getElementById(
+        "clock1"
+    ).textContent = time;
+
+    document.getElementById(
+        "clock2"
+    ).textContent = time;
+
+}
+
+updateClock();
+
+setInterval(
+    updateClock,
+    30000
+);
+
+</script>
+
+</body>
+</html>
